@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -19,8 +18,10 @@ import ListItemText from '@mui/material/ListItemText';
 import LoginIcon from '@mui/icons-material/Login';
 import CreateIcon from '@mui/icons-material/Create';
 import LensBlurIcon from '@mui/icons-material/LensBlur';
+import LogoutIcon from '@mui/icons-material/Logout';
 
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 const drawerWidth = 240;
 
@@ -91,7 +92,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const Header = () => {
 	const theme = useTheme();
-	const [open, setOpen] = React.useState(false);
+	const navigate = useNavigate()
+	const [open, setOpen] = useState(false);
+	const [token, setToken] = useState('');
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -100,6 +103,119 @@ const Header = () => {
 	const handleDrawerClose = () => {
 		setOpen(false);
 	};
+
+	const handleLogout = () => {
+		localStorage.removeItem('token');
+		setToken('');
+
+		navigate('/');
+		window.location.reload();
+	};
+
+	console.log();
+
+	useEffect(() => {
+		const test = localStorage.getItem('token');
+		if (test) {
+			setToken(test);
+		}
+	}, []);
+
+	if (token) {
+		return (
+			<Box sx={{ display: 'flex' }}>
+				<CssBaseline />
+				<AppBar position="fixed" open={open}>
+					<Toolbar>
+						<IconButton
+							color="inherit"
+							aria-label="open drawer"
+							onClick={handleDrawerOpen}
+							edge="start"
+							sx={{
+								marginRight: 5,
+								...(open && { display: 'none' }),
+							}}
+						>
+							<MenuIcon />
+						</IconButton>
+						<Typography
+							variant="h6"
+							noWrap
+							component={NavLink}
+							to="/"
+							underline="none"
+							color="inherit"
+						>
+							Tournament Chess
+						</Typography>
+					</Toolbar>
+				</AppBar>
+				<Drawer variant="permanent" open={open}>
+					<DrawerHeader>
+						<IconButton onClick={handleDrawerClose}>
+							{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+						</IconButton>
+					</DrawerHeader>
+					<Divider />
+					<List>
+						<ListItem key="logout" disablePadding sx={{ display: 'block' }} onClick={handleLogout}>
+							<ListItemButton
+								sx={{
+									minHeight: 48,
+									justifyContent: open ? 'initial' : 'center',
+									px: 2.5,
+								}}
+							>
+								<ListItemIcon
+									sx={{
+										minWidth: 0,
+										mr: open ? 3 : 'auto',
+										justifyContent: 'center',
+									}}
+								>
+									<LogoutIcon />
+								</ListItemIcon>
+								<ListItemText primary="sign up" sx={{ opacity: open ? 1 : 0 }} />
+							</ListItemButton>
+						</ListItem>
+					</List>
+					<Divider />
+					<List>
+						<ListItem
+							key="tournaments"
+							disablePadding
+							sx={{ display: 'block' }}
+							component={Link}
+							to="/all-tournaments"
+						>
+							<ListItemButton
+								sx={{
+									minHeight: 48,
+									justifyContent: open ? 'initial' : 'center',
+									px: 2.5,
+								}}
+							>
+								<ListItemIcon
+									sx={{
+										minWidth: 0,
+										mr: open ? 3 : 'auto',
+										justifyContent: 'center',
+									}}
+								>
+									<LensBlurIcon />
+								</ListItemIcon>
+								<ListItemText primary="tournaments" sx={{ opacity: open ? 1 : 0 }} />
+							</ListItemButton>
+						</ListItem>
+					</List>
+				</Drawer>
+				<Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+					<DrawerHeader />
+				</Box>
+			</Box>
+		);
+	}
 
 	return (
 		<Box sx={{ display: 'flex' }}>
@@ -130,8 +246,8 @@ const Header = () => {
 					</Typography>
 				</Toolbar>
 			</AppBar>
-			<Drawer variant="permanent" open={open} >
-				<DrawerHeader >
+			<Drawer variant="permanent" open={open}>
+				<DrawerHeader>
 					<IconButton onClick={handleDrawerClose}>
 						{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
 					</IconButton>
@@ -139,11 +255,11 @@ const Header = () => {
 				<Divider />
 				<List>
 					<ListItem
-						key="sign up"
+						key="sign in"
 						disablePadding
 						sx={{ display: 'block' }}
 						component={Link}
-						to="/signup"
+						to="/sign-in"
 					>
 						<ListItemButton
 							sx={{

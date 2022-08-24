@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import TournamentsAll from '../../components/TournamentsALL';
+import Connection from '../../components/Connection';
 
-const Tournaments = () => {
+const Login = () => {
 	const [open, setOpen] = useState(false);
 	const location = useLocation();
 
@@ -13,9 +13,9 @@ const Tournaments = () => {
 	}, []);
 	return (
 		<>
-			<TournamentsAll />
+			<Connection />
 		</>
 	);
 };
 
-export default Tournaments;
+export default Login;

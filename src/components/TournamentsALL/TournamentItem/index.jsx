@@ -13,7 +13,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import style from './tournament.module.scss';
+import HowManyUser from './HowManyUser';
 
 const columns = [
 	{ id: 'name', label: 'Name', minWidth: 170 },
@@ -65,7 +65,7 @@ const TournamentItem = (onData) => {
 			month: '2-digit',
 			day: '2-digit',
 		});
-		const player = '0/' + playersMax;
+		const player = '/' + playersMax;
 		return { name, location, category, womenOnly, elo, statut, registrationEND, player, id };
 	};
 
@@ -112,7 +112,7 @@ const TournamentItem = (onData) => {
 										const value = row[column.id];
 										return (
 											<TableCell key={column.id} align={column.align}>
-												{value}
+												{column.id === 'player' ? <><HowManyUser onData={row.id}/>{value}</>: value}
 												{column.id === 'womenOnly' ? value ? <FemaleIcon /> : <WcIcon /> : ''}
 												{column.id === 'action' ? (
 													<IconButton component={Link} to="/info-tournament" state={{id:row.id,name:row.name}}>

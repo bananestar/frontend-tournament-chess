@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import TournamentsAll from '../../components/TournamentsALL';
 
-const Tournaments = () => {
+const NotFound = () => {
 	const [open, setOpen] = useState(false);
 	const location = useLocation();
 
@@ -13,9 +12,9 @@ const Tournaments = () => {
 	}, []);
 	return (
 		<>
-			<TournamentsAll />
+			<h1>ERROR 404</h1>
 		</>
 	);
 };
 
-export default Tournaments;
+export default NotFound;
