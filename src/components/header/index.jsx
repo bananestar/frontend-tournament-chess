@@ -176,7 +176,7 @@ const Header = () => {
 								>
 									<LogoutIcon />
 								</ListItemIcon>
-								<ListItemText primary="sign up" sx={{ opacity: open ? 1 : 0 }} />
+								<ListItemText primary="logout" sx={{ opacity: open ? 1 : 0 }} />
 							</ListItemButton>
 						</ListItem>
 					</List>
