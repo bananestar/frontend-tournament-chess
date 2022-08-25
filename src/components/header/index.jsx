@@ -92,7 +92,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const Header = () => {
 	const theme = useTheme();
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
 	const [token, setToken] = useState('');
 
@@ -120,102 +120,6 @@ const Header = () => {
 			setToken(test);
 		}
 	}, []);
-
-	if (token) {
-		return (
-			<Box sx={{ display: 'flex' }}>
-				<CssBaseline />
-				<AppBar position="fixed" open={open}>
-					<Toolbar>
-						<IconButton
-							color="inherit"
-							aria-label="open drawer"
-							onClick={handleDrawerOpen}
-							edge="start"
-							sx={{
-								marginRight: 5,
-								...(open && { display: 'none' }),
-							}}
-						>
-							<MenuIcon />
-						</IconButton>
-						<Typography
-							variant="h6"
-							noWrap
-							component={NavLink}
-							to="/"
-							underline="none"
-							color="inherit"
-						>
-							Tournament Chess
-						</Typography>
-					</Toolbar>
-				</AppBar>
-				<Drawer variant="permanent" open={open}>
-					<DrawerHeader>
-						<IconButton onClick={handleDrawerClose}>
-							{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-						</IconButton>
-					</DrawerHeader>
-					<Divider />
-					<List>
-						<ListItem key="logout" disablePadding sx={{ display: 'block' }} onClick={handleLogout}>
-							<ListItemButton
-								sx={{
-									minHeight: 48,
-									justifyContent: open ? 'initial' : 'center',
-									px: 2.5,
-								}}
-							>
-								<ListItemIcon
-									sx={{
-										minWidth: 0,
-										mr: open ? 3 : 'auto',
-										justifyContent: 'center',
-									}}
-								>
-									<LogoutIcon />
-								</ListItemIcon>
-								<ListItemText primary="logout" sx={{ opacity: open ? 1 : 0 }} />
-							</ListItemButton>
-						</ListItem>
-					</List>
-					<Divider />
-					<List>
-						<ListItem
-							key="tournaments"
-							disablePadding
-							sx={{ display: 'block' }}
-							component={Link}
-							to="/all-tournaments"
-						>
-							<ListItemButton
-								sx={{
-									minHeight: 48,
-									justifyContent: open ? 'initial' : 'center',
-									px: 2.5,
-								}}
-							>
-								<ListItemIcon
-									sx={{
-										minWidth: 0,
-										mr: open ? 3 : 'auto',
-										justifyContent: 'center',
-									}}
-								>
-									<LensBlurIcon />
-								</ListItemIcon>
-								<ListItemText primary="tournaments" sx={{ opacity: open ? 1 : 0 }} />
-							</ListItemButton>
-						</ListItem>
-					</List>
-				</Drawer>
-				<Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-					<DrawerHeader />
-				</Box>
-			</Box>
-		);
-	}
 
 	return (
 		<Box sx={{ display: 'flex' }}>
@@ -254,58 +158,83 @@ const Header = () => {
 				</DrawerHeader>
 				<Divider />
 				<List>
-					<ListItem
-						key="sign in"
-						disablePadding
-						sx={{ display: 'block' }}
-						component={Link}
-						to="/sign-in"
-					>
-						<ListItemButton
-							sx={{
-								minHeight: 48,
-								justifyContent: open ? 'initial' : 'center',
-								px: 2.5,
-							}}
-						>
-							<ListItemIcon
+					{token ? (
+						<ListItem key="logout" disablePadding sx={{ display: 'block' }} onClick={handleLogout}>
+							<ListItemButton
 								sx={{
-									minWidth: 0,
-									mr: open ? 3 : 'auto',
-									justifyContent: 'center',
+									minHeight: 48,
+									justifyContent: open ? 'initial' : 'center',
+									px: 2.5,
 								}}
 							>
-								<CreateIcon />
-							</ListItemIcon>
-							<ListItemText primary="sign up" sx={{ opacity: open ? 1 : 0 }} />
-						</ListItemButton>
-					</ListItem>
-					<ListItem
-						key="login"
-						disablePadding
-						sx={{ display: 'block' }}
-						component={Link}
-						to="/login"
-					>
-						<ListItemButton
-							sx={{
-								minHeight: 48,
-								justifyContent: open ? 'initial' : 'center',
-								px: 2.5,
-							}}
-						>
-							<ListItemIcon
-								sx={{
-									minWidth: 0,
-									mr: open ? 3 : 'auto',
-									justifyContent: 'center',
-								}}
+								<ListItemIcon
+									sx={{
+										minWidth: 0,
+										mr: open ? 3 : 'auto',
+										justifyContent: 'center',
+									}}
+								>
+									<LogoutIcon />
+								</ListItemIcon>
+								<ListItemText primary="logout" sx={{ opacity: open ? 1 : 0 }} />
+							</ListItemButton>
+						</ListItem>
+					) : (
+						<>
+							<ListItem
+								key="sign in"
+								disablePadding
+								sx={{ display: 'block' }}
+								component={Link}
+								to="/sign-in"
 							>
-								<LoginIcon />
-							</ListItemIcon>
-							<ListItemText primary="login" sx={{ opacity: open ? 1 : 0 }} />
-						</ListItemButton>
-					</ListItem>
+								<ListItemButton
+									sx={{
+										minHeight: 48,
+										justifyContent: open ? 'initial' : 'center',
+										px: 2.5,
+									}}
+								>
+									<ListItemIcon
+										sx={{
+											minWidth: 0,
+											mr: open ? 3 : 'auto',
+											justifyContent: 'center',
+										}}
+									>
+										<CreateIcon />
+									</ListItemIcon>
+									<ListItemText primary="sign up" sx={{ opacity: open ? 1 : 0 }} />
+								</ListItemButton>
+							</ListItem>
+							<ListItem
+								key="login"
+								disablePadding
+								sx={{ display: 'block' }}
+								component={Link}
+								to="/login"
+							>
+								<ListItemButton
+									sx={{
+										minHeight: 48,
+										justifyContent: open ? 'initial' : 'center',
+										px: 2.5,
+									}}
+								>
+									<ListItemIcon
+										sx={{
+											minWidth: 0,
+											mr: open ? 3 : 'auto',
+											justifyContent: 'center',
+										}}
+									>
+										<LoginIcon />
+									</ListItemIcon>
+									<ListItemText primary="login" sx={{ opacity: open ? 1 : 0 }} />
+								</ListItemButton>
+							</ListItem>
+						</>
+					)}
 				</List>
 				<Divider />
 				<List>
