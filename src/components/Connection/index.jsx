@@ -2,14 +2,17 @@ import { useForm } from 'react-hook-form';
 import { Box, Container } from '@mui/material';
 
 import TextField from '@mui/material/TextField';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Connection = () => {
-	const { handleSubmit, register } = useForm();
+	const { handleSubmit, register } = useForm({
+		identifier: '',
+		currentPassword: '',
+	});
+
 	const [identifier, setIdentifier] = useState('');
 	const [currentPassword, setCurrentPassword] = useState('');
 	const [data, setData] = useState();
@@ -83,7 +86,6 @@ const Connection = () => {
 			</form>
 			{/* </Paper> */}
 		</Box>
-		
 	);
 };
 
