@@ -4,8 +4,11 @@ import { Box, Container } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
+import { useRecoilState } from 'recoil';
+import { jwtAtom } from './../../atoms/jwtAtom';
+import ConnectionRequest from './ConnectionRequest';
 
 const Connection = () => {
 	const { handleSubmit, register } = useForm({
@@ -15,10 +18,16 @@ const Connection = () => {
 
 	const [identifier, setIdentifier] = useState('');
 	const [currentPassword, setCurrentPassword] = useState('');
-	const [data, setData] = useState();
-	const [isLoading, setLoading] = useState(true);
-	const [errors, setErrors] = useState();
+	const [identifiers, setIdentifiers] = useState();
 	const navigate = useNavigate();
+
+	const [token, setToken] = useRecoilState(jwtAtom);
+
+	useEffect(() => {
+		if (token) {
+			navigate('/');
+		}
+	}, [token]);
 
 	const onSubmit = ({ identifier, currentPassword }) => {
 		if (!identifier || !currentPassword) {
@@ -27,31 +36,14 @@ const Connection = () => {
 		setIdentifier(identifier);
 		setCurrentPassword(currentPassword);
 
-		const identifiers = {
+		setIdentifiers({
 			identifier: identifier,
 			password: currentPassword,
-		};
-
-		axios
-			.post(import.meta.env.VITE_API_LOGIN, identifiers)
-			.then(({ data }) => {
-				setData(data);
-				localStorage.setItem('token', data.result.token);
-				navigate('/');
-				window.location.reload();
-			})
-			.catch((errors) => {
-				setErrors(errors);
-			})
-			.finally(() => {
-				setLoading(false);
-			});
+		});
 	};
 
 	return (
 		<Box display="flex" justifyContent="center" minHeight="100vh">
-			{/* <Paper> */}
-
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Container>
 					<h2>Login</h2>
@@ -83,8 +75,11 @@ const Connection = () => {
 				<Container>
 					<Button type="submit">Send</Button>
 				</Container>
+
+				<Container>
+					{identifiers ? <ConnectionRequest onIdentifiers={identifiers} /> : ''}
+				</Container>
 			</form>
-			{/* </Paper> */}
 		</Box>
 	);
 };

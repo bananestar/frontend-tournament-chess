@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes, useRoutes } from 'react-router-dom';
-import Header from './components/Header';
+import Header from './components/header';
 import BaseLayout from './layouts/BaseLayout';
+import AdminPage from './pages/Admin';
 import Home from './pages/Home';
 import Login from './pages/login';
 import NotFound from './pages/notfound';
@@ -18,6 +19,7 @@ function App() {
 					<Route path="/login" element={<Login />} />
 					<Route path="/all-tournaments" element={<Tournaments />} />
 					<Route path="/info-tournament" element={<TournamentInfo />} />
+					<Route path="/admin-panel" element={<AdminPage />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BaseLayout>

@@ -7,9 +7,10 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import SignInRequest from './SignInRequest';
+import { useRecoilState } from 'recoil';
+import { jwtAtom } from '../../atoms/jwtAtom';
 
 const SignIn = () => {
 	const { handleSubmit, register } = useForm();
@@ -24,6 +25,9 @@ const SignIn = () => {
 	const [data, setData] = useState('');
 	const [isLoading, setLoading] = useState(true);
 	const [errors, setErrors] = useState();
+	const [registers, setRegisters] = useState();
+
+	const [token, setToken] = useRecoilState(jwtAtom);
 
 	const [errorMessagePseudo, setErrorMessagePseudo] = useState('');
 	const [errorMessageMail, setErrorMessageMail] = useState('');
@@ -31,9 +35,15 @@ const SignIn = () => {
 	const [errorMessagePassword, setErrorMessagePassword] = useState('');
 	const [errorMessageElo, setErrorMessageElo] = useState('');
 
+	useEffect(() => {
+		if (token) {
+			navigate('/');
+		}
+	}, [token]);
+
 	const onSubmit = ({ pseudo, mail, birthdate, currentPassword, gender, elo }) => {
 		if (!pseudo || !mail || !birthdate || !currentPassword || !gender || !elo) {
-			const data = {
+			const dump = {
 				pseudo: pseudo,
 				email: mail,
 				password: currentPassword,
@@ -41,32 +51,17 @@ const SignIn = () => {
 				gender: gender,
 				elo: elo,
 			};
-			return console.log(data);
+			return console.log(dump);
 		}
 
-		const register = {
+		setRegisters({
 			pseudo: pseudo,
 			email: mail,
 			password: currentPassword,
 			birthDate: birthdate,
 			gender: gender,
 			elo: elo,
-		};
-
-		axios
-			.post(import.meta.env.VITE_API_REGISTER, register)
-			.then(({ data }) => {
-				setData(data);
-				localStorage.setItem('token', data.result.token);
-				navigate('/');
-				window.location.reload();
-			})
-			.catch((errors) => {
-				setErrors(errors);
-			})
-			.finally(() => {
-				setLoading(false);
-			});
+		});
 	};
 
 	useEffect(() => {
@@ -242,8 +237,9 @@ const SignIn = () => {
 						Send
 					</Button>
 				</Container>
+
+				<Container>{registers ? <SignInRequest onRegisters={registers} /> : ''}</Container>
 			</form>
-			{isLoading && data ? <CircularProgress /> : ''}
 		</Box>
 	);
 };

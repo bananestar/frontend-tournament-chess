@@ -1,7 +1,7 @@
 import { Box, CircularProgress } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import useQuery from '../../../hooks/useQuery';
+import {useQuery} from '../../../hooks/useQuery';
 
 import * as React from 'react';
 import Table from '@mui/material/Table';
@@ -11,7 +11,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import useSearchUserAll from '../../../hooks/useSearchUser';
 import MatchInfo from './matchItem';
 
 const TournamentInfo = () => {
@@ -25,7 +24,7 @@ const TournamentInfo = () => {
 		{}
 	);
 
-	const datas = useSearchUserAll(import.meta.env.VITE_API_MATCH_USER, {});
+	const datas = useQuery(import.meta.env.VITE_API_MATCH_USER, {});
 
 	if (isLoading || datas.isLoading) {
 		return (

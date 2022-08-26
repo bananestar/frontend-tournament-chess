@@ -1,5 +1,5 @@
 import { Box, CircularProgress } from '@mui/material';
-import useQuery from '../../../../hooks/useQuery';
+import {useQuery} from '../../../../hooks/useQuery';
 
 const HowManyUser = ({ onData }) => {
 	const { data, isLoading, errors } = useQuery(

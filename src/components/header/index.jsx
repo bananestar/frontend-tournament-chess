@@ -19,9 +19,12 @@ import LoginIcon from '@mui/icons-material/Login';
 import CreateIcon from '@mui/icons-material/Create';
 import LensBlurIcon from '@mui/icons-material/LensBlur';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { adminAtom, jwtAtom } from '../../atoms/jwtAtom';
 
 const drawerWidth = 240;
 
@@ -94,7 +97,9 @@ const Header = () => {
 	const theme = useTheme();
 	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
-	const [token, setToken] = useState('');
+	const [token, setToken] = useRecoilState(jwtAtom);
+	const [isAdmin, setIsAdmin] = useRecoilState(adminAtom);
+	
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -105,21 +110,9 @@ const Header = () => {
 	};
 
 	const handleLogout = () => {
-		localStorage.removeItem('token');
-		setToken('');
-
+		setToken(null);
 		navigate('/');
-		window.location.reload();
 	};
-
-	console.log();
-
-	useEffect(() => {
-		const test = localStorage.getItem('token');
-		if (test) {
-			setToken(test);
-		}
-	}, []);
 
 	return (
 		<Box sx={{ display: 'flex' }}>
@@ -159,26 +152,66 @@ const Header = () => {
 				<Divider />
 				<List>
 					{token ? (
-						<ListItem key="logout" disablePadding sx={{ display: 'block' }} onClick={handleLogout}>
-							<ListItemButton
-								sx={{
-									minHeight: 48,
-									justifyContent: open ? 'initial' : 'center',
-									px: 2.5,
-								}}
+						<>
+							<ListItem
+								key="logout"
+								disablePadding
+								sx={{ display: 'block' }}
+								onClick={handleLogout}
 							>
-								<ListItemIcon
+								<ListItemButton
 									sx={{
-										minWidth: 0,
-										mr: open ? 3 : 'auto',
-										justifyContent: 'center',
+										minHeight: 48,
+										justifyContent: open ? 'initial' : 'center',
+										px: 2.5,
 									}}
 								>
-									<LogoutIcon />
-								</ListItemIcon>
-								<ListItemText primary="logout" sx={{ opacity: open ? 1 : 0 }} />
-							</ListItemButton>
-						</ListItem>
+									<ListItemIcon
+										sx={{
+											minWidth: 0,
+											mr: open ? 3 : 'auto',
+											justifyContent: 'center',
+										}}
+									>
+										<LogoutIcon />
+									</ListItemIcon>
+									<ListItemText primary="logout" sx={{ opacity: open ? 1 : 0 }} />
+								</ListItemButton>
+							</ListItem>
+							{isAdmin ? (
+								<>
+									<Divider />
+									<ListItem
+										key="adminPanel"
+										disablePadding
+										sx={{ display: 'block' }}
+										component={Link}
+										to="/admin-panel"
+									>
+										<ListItemButton
+											sx={{
+												minHeight: 48,
+												justifyContent: open ? 'initial' : 'center',
+												px: 2.5,
+											}}
+										>
+											<ListItemIcon
+												sx={{
+													minWidth: 0,
+													mr: open ? 3 : 'auto',
+													justifyContent: 'center',
+												}}
+											>
+												<AdminPanelSettingsIcon />
+											</ListItemIcon>
+											<ListItemText primary="Admin Panel" sx={{ opacity: open ? 1 : 0 }} />
+										</ListItemButton>
+									</ListItem>
+								</>
+							) : (
+								''
+							)}
+						</>
 					) : (
 						<>
 							<ListItem
