@@ -5,7 +5,7 @@ const ConnectionRequest = (onIdentifiers) => {
 	const identifiers = onIdentifiers.onIdentifiers;
 
 	if (identifiers) {
-		const { isLoading, errors } = useLogin(import.meta.env.VITE_API_LOGIN, identifiers);
+		const { isLoading, errors } = useLogin(identifiers);
 		if (isLoading) {
 			return <CircularProgress />;
 		}

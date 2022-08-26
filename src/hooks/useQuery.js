@@ -4,6 +4,9 @@ import { useRecoilState } from "recoil";
 import { adminAtom, jwtAtom } from "../atoms/jwtAtom";
 import { useJwt } from "react-jwt";
 
+const URL_LOGIN = import.meta.env.VITE_API_LOGIN,
+const URL_REGISTER = import.meta.env.VITE_API_REGISTER
+
 export const useQuery = (url, params) => {
 	const [data, setData] = useState();
 	const [isLoading, setLoading] = useState(true);
@@ -24,7 +27,7 @@ export const useQuery = (url, params) => {
 	return { data, isLoading, errors };
 }
 
-export const useLogin = (url, identifiers) => {
+export const useLogin = (identifiers) => {
 	const [data, setData] = useState();
 	const [isLoading, setLoading] = useState(true);
 	const [errors, setErrors] = useState();
@@ -32,7 +35,7 @@ export const useLogin = (url, identifiers) => {
 	const [token, setToken] = useRecoilState(jwtAtom);
 
 	useEffect(() => {
-		axios.post(url, identifiers).then(({ data }) => {
+		axios.post(URL_LOGIN, identifiers).then(({ data }) => {
 			setData(data)
 			setToken(data.result.token);
 		}).catch((errors) => {
@@ -45,7 +48,7 @@ export const useLogin = (url, identifiers) => {
 	return { data, isLoading, errors };
 }
 
-export const useRegister = (url, registers) => {
+export const useRegister = (registers) => {
 	const [data, setData] = useState();
 	const [isLoading, setLoading] = useState(true);
 	const [errors, setErrors] = useState();
@@ -53,7 +56,7 @@ export const useRegister = (url, registers) => {
 	const [token, setToken] = useRecoilState(jwtAtom);
 
 	useEffect(() => {
-		axios.post(url, registers).then(({ data }) => {
+		axios.post(URL_REGISTER, registers).then(({ data }) => {
 			setData(data)
 			setToken(data.result.token)
 		}).catch((errors) => {

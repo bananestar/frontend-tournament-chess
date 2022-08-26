@@ -4,7 +4,7 @@ import { useRegister } from "../../../hooks/useQuery"
 const SignInRequest = (onRegisters) => {
     const registers = onRegisters.onRegisters
     if (registers) {
-        const {isLoading, errors} = useRegister(import.meta.env.VITE_API_REGISTER,registers)
+        const {isLoading, errors} = useRegister(registers)
         if (isLoading) {
 			return <CircularProgress />;
 		}
