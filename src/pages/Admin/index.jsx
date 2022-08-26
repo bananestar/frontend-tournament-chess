@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import TournamentsAll from '../../components/TournamentsALL';
 
 const AdminPage = () => {
 	const [open, setOpen] = useState(false);
@@ -13,6 +14,7 @@ const AdminPage = () => {
 	return (
 		<>
 			<h1>Admin Page</h1>
+			<TournamentsAll />
 		</>
 	);
 };

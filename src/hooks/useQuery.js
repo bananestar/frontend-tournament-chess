@@ -1,11 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from 'react'
 import { useRecoilState } from "recoil";
-import { adminAtom, jwtAtom } from "../atoms/jwtAtom";
-import { useJwt } from "react-jwt";
+import { jwtAtom } from "../atoms/jwtAtom";
 
-const URL_LOGIN = import.meta.env.VITE_API_LOGIN,
-const URL_REGISTER = import.meta.env.VITE_API_REGISTER
+const URL_LOGIN = import.meta.env.VITE_API_LOGIN;
+const URL_REGISTER = import.meta.env.VITE_API_REGISTER;
 
 export const useQuery = (url, params) => {
 	const [data, setData] = useState();

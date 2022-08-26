@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes, useRoutes } from 'react-router-dom';
-import Header from './components/header';
 import BaseLayout from './layouts/BaseLayout';
 import AdminPage from './pages/Admin';
 import Home from './pages/Home';
@@ -8,8 +7,10 @@ import NotFound from './pages/notfound';
 import SignInPage from './pages/signIn';
 import TournamentInfo from './pages/tournamentInfo';
 import Tournaments from './pages/tournaments';
+import { useJwtAdmin } from './hooks/useJwt';
 
 function App() {
+	useJwtAdmin()
 	return (
 		<BrowserRouter forceRefresh={true}>
 			<BaseLayout>

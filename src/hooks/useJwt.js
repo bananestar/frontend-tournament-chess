@@ -17,9 +17,9 @@ export const useJwtAdmin = () => {
     useEffect(() => {
         if (decodedToken) {
             setIsAdmin(decodedToken.isAdmin)
-            console.log('hook ',isAdmin);
+            console.log('isAdmin => ',isAdmin);
         }
     }, [decodedToken])
-    
+    console.log('isAdmin => ',isAdmin);
     return { isAdmin }
 }

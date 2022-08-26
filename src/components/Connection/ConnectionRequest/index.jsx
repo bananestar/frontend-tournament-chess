@@ -20,7 +20,7 @@ const ConnectionRequest = (onIdentifiers) => {
 		}
 	}
 
-	useJwtAdmin()
+	
 
 	return <></>;
 };

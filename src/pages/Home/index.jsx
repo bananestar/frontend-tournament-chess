@@ -4,7 +4,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { adminAtom, bearerSelector, jwtAtom } from '../../atoms/jwtAtom';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { IconButton } from '@mui/material';
-import { useJwtAdmin } from '../../hooks/useJwt';
 
 const Home = () => {
 	const [open, setOpen] = useState(false);
@@ -15,8 +14,6 @@ const Home = () => {
 
 	const [token, setToken] = useRecoilState(jwtAtom);
 	const [isAdmin, setIsAdmin] = useRecoilState(adminAtom);
-
-	useJwtAdmin()
 
 	useEffect(() => {
 		if (location.state) {

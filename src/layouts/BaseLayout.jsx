@@ -1,9 +1,10 @@
-import { Box, Container, CssBaseline } from '@mui/material';
-import { render } from 'react-dom';
+import { Box, Container } from '@mui/material';
 import Footer from '../components/footer';
 import Header from '../components/header';
+import { useJwtAdmin } from '../hooks/useJwt';
 
 const BaseLayout = ({ children }) => {
+	useJwtAdmin()
 	return (
 		<>
 			{/* <CssBaseline /> */}

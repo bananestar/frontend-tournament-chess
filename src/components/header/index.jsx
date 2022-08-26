@@ -25,6 +25,8 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { adminAtom, jwtAtom } from '../../atoms/jwtAtom';
+import { useJwtAdmin } from '../../hooks/useJwt';
+
 
 const drawerWidth = 240;
 
@@ -100,6 +102,7 @@ const Header = () => {
 	const [token, setToken] = useRecoilState(jwtAtom);
 	const [isAdmin, setIsAdmin] = useRecoilState(adminAtom);
 	
+	useJwtAdmin()
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
