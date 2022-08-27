@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {useQuery} from '../../../hooks/useQuery';
 
 import * as React from 'react';

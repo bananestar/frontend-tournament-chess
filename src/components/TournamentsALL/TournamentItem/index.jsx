@@ -10,10 +10,14 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import SearchIcon from '@mui/icons-material/Search';
+import BuildIcon from '@mui/icons-material/Build';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import HowManyUser from './HowManyUser';
+import { adminAtom } from '../../../atoms/jwtAtom';
+import { useRecoilState } from 'recoil';
 
 const columns = [
 	{ id: 'name', label: 'Name', minWidth: 170 },
@@ -37,6 +41,10 @@ const TournamentItem = (onData) => {
 	const [page, setPage] = useState(0);
 	const [rows, setRows] = useState([]);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
+
+	const pathLocation = useLocation().pathname;
+
+	const [isAdmin, setIsAdmin] = useRecoilState(adminAtom);
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -112,12 +120,55 @@ const TournamentItem = (onData) => {
 										const value = row[column.id];
 										return (
 											<TableCell key={column.id} align={column.align}>
-												{column.id === 'player' ? <><HowManyUser onData={row.id}/>{value}</>: value}
+												{column.id === 'player' ? (
+													<>
+														<HowManyUser onData={row.id} />
+														{value}
+													</>
+												) : (
+													value
+												)}
 												{column.id === 'womenOnly' ? value ? <FemaleIcon /> : <WcIcon /> : ''}
 												{column.id === 'action' ? (
-													<IconButton component={Link} to="/info-tournament" state={{id:row.id,name:row.name}}>
-														<SearchIcon />
-													</IconButton>
+													<>
+														<IconButton
+															component={Link}
+															to="/info-tournament"
+															state={{ id: row.id, name: row.name }}
+														>
+															<SearchIcon />
+														</IconButton>
+														{isAdmin && pathLocation==='/admin-panel' ? (
+															<>
+																<IconButton
+																sx={{
+																	borderColor: 'yellow',
+																	color: '#CFAB27',
+																	':hover': { backgroundColor: '#CFAB27', color: 'white' },
+																}}
+																	component={Link}
+																	to=""
+																	state={{ id: row.id, name: row.name }}
+																>
+																	<BuildIcon />
+																</IconButton>
+																<IconButton
+																	sx={{
+																		borderColor: 'red',
+																		color: 'red',
+																		':hover': { backgroundColor: 'red', color: 'white' },
+																	}}
+																	component={Link}
+																	to="/all-tournaments/panel-deleted"
+																	state={{ id: row.id, name: row.name }}
+																>
+																	<DeleteIcon />
+																</IconButton>
+															</>
+														) : (
+															''
+														)}
+													</>
 												) : (
 													''
 												)}

@@ -26,6 +26,29 @@ export const useQuery = (url, params) => {
 	return { data, isLoading, errors };
 }
 
+export const useDelete = (url, auth, run) => {
+	const [data, setData] = useState();
+	const [isLoading, setLoading] = useState(true);
+	const [errors, setErrors] = useState();
+
+	useEffect(() => {
+		if (run) {
+			axios.delete(url, {
+				headers: {
+					Authorization: `Bearer ${auth}`,
+				}
+			}).then(({ data }) => {
+				setData(data)
+			}).catch((errors) => {
+				setErrors(errors)
+			}).finally(() => {
+				setLoading(false)
+			})
+		}
+	}, [run])
+	return { data, isLoading, errors }
+}
+
 export const useLogin = (identifiers) => {
 	const [data, setData] = useState();
 	const [isLoading, setLoading] = useState(true);
