@@ -1,7 +1,7 @@
 import {
 	CircularProgress,
 	IconButton,
-	InputBase,
+	InputAdornment,
 	Paper,
 	Table,
 	TableBody,
@@ -10,13 +10,13 @@ import {
 	TableHead,
 	TablePagination,
 	TableRow,
+	TextField,
 } from '@mui/material';
 import BuildIcon from '@mui/icons-material/Build';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Box } from '@mui/system';
 
 const columns = [
@@ -29,55 +29,12 @@ const columns = [
 	{ id: 'action', label: '', minWidth: 170 },
 ];
 
-const Search = styled('div')(({ theme }) => ({
-	position: 'relative',
-	borderRadius: theme.shape.borderRadius,
-	backgroundColor: alpha(theme.palette.common.white, 0.15),
-	'&:hover': {
-		backgroundColor: alpha(theme.palette.common.white, 0.25),
-	},
-	marginLeft: 0,
-	width: '100%',
-	[theme.breakpoints.up('sm')]: {
-		marginLeft: theme.spacing(1),
-		width: 'auto',
-	},
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-	padding: theme.spacing(0, 2),
-	height: '100%',
-	position: 'absolute',
-	pointerEvents: 'none',
-	display: 'flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-	color: 'inherit',
-	'& .MuiInputBase-input': {
-		padding: theme.spacing(1, 1, 1, 0),
-		// vertical padding + font size from searchIcon
-		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-		transition: theme.transitions.create('width'),
-		width: '100%',
-		[theme.breakpoints.up('sm')]: {
-			width: '12ch',
-			'&:focus': {
-				width: '20ch',
-			},
-		},
-	},
-}));
-
 const DisplayAll = ({ onData }) => {
 	const [page, setPage] = useState(0);
 	const [rows, setRows] = useState([]);
 	const [rowsSave, setRowsSave] = useState([]);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [searched, setSearched] = useState('');
-	const [filterRows, setFilterRows] = useState('');
 
 	const data = onData;
 
@@ -88,6 +45,38 @@ const DisplayAll = ({ onData }) => {
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(+event.target.value);
 		setPage(0);
+	};
+
+	const requestSearch = (searched) => {
+		setSearched(searched);
+
+		if (!searched) {
+			console.log('if');
+			setRows(rowsSave);
+		} else {
+			console.log('else');
+			setRows(
+				rows.filter((row) => {
+					const searchByPseudo = row.pseudo
+						.toString()
+						.toLowerCase()
+						.includes(searched.toString().toLowerCase());
+
+					const searchByEmail = row.email
+						.toString()
+						.toLowerCase()
+						.includes(searched.toString().toLowerCase());
+
+					if (searchByPseudo) {
+						return searchByPseudo;
+					}
+
+					if (searchByEmail) {
+						return searchByEmail;
+					}
+				})
+			);
+		}
 	};
 
 	const createData = (id, pseudo, email, is_Admin, created_At, updated_At) => {
@@ -113,48 +102,23 @@ const DisplayAll = ({ onData }) => {
 		setRowsSave(newData);
 	}, []);
 
-	useEffect(() => {
-		setFilterRows(
-			rows.filter((row) => {
-				const searchByPseudo = row.pseudo
-					.toString()
-					.toLowerCase()
-					.includes(searched.toString().toLowerCase());
-				const searchByEmail = row.email
-					.toString()
-					.toLowerCase()
-					.includes(searched.toString().toLowerCase());
-				if (searchByPseudo) {
-					return searchByPseudo;
-				}
-				if (searchByEmail) {
-					return searchByEmail;
-				}
-			})
-		);
-		setRows(filterRows);
-
-		console.log('after =========>', rowsSave);
-		if (searched === '') {
-			setRows(rowsSave);
-		}
-	}, [searched]);
-
 	if (rows && rowsSave) {
 		return (
 			<Paper sx={{ width: '100%', overflow: 'hidden' }}>
-				<Search>
-					<SearchIconWrapper>
-						<SearchIcon />
-					</SearchIconWrapper>
-					<StyledInputBase
-						placeholder="Search…"
-						inputProps={{ 'aria-label': 'search' }}
-						value={searched}
-						onBlur={(e) => setSearched(e.target.value)}
-						onChange={(e) => setSearched(e.target.value)}
-					/>
-				</Search>
+				<TextField
+					variant="outlined"
+					placeholder="search..."
+					value={searched}
+					type="search"
+					InputProps={{
+						startAdornment: (
+							<InputAdornment position="start">
+								<SearchIcon />
+							</InputAdornment>
+						),
+					}}
+					onInput={(e) => requestSearch(e.target.value)}
+				/>
 				<TableContainer>
 					<Table stickyHeader aria-label="sticky table">
 						<TableHead>
@@ -180,13 +144,35 @@ const DisplayAll = ({ onData }) => {
 												<TableCell key={column.id} align={column.align}>
 													{column.id === 'action' ? (
 														<>
-															<IconButton>
+															<IconButton
+																component={Link}
+																to=""
+																state={{ id: row.id, name: row.name }}
+															>
 																<SearchIcon />
 															</IconButton>
-															<IconButton>
+															<IconButton
+																sx={{
+																	borderColor: 'yellow',
+																	color: '#CFAB27',
+																	':hover': { backgroundColor: '#CFAB27', color: 'white' },
+																}}
+																component={Link}
+																to=""
+																state={{ id: row.id, name: row.name }}
+															>
 																<BuildIcon />
 															</IconButton>
-															<IconButton>
+															<IconButton
+																sx={{
+																	borderColor: 'red',
+																	color: 'red',
+																	':hover': { backgroundColor: 'red', color: 'white' },
+																}}
+																component={Link}
+																to=""
+																state={{ id: row.id, name: row.name }}
+															>
 																<DeleteIcon />
 															</IconButton>
 														</>
