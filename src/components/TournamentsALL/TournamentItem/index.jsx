@@ -148,7 +148,7 @@ const TournamentItem = (onData) => {
 																}}
 																	component={Link}
 																	to="/admin-panel/tournaments/panel-updated"
-																	state={{ id: row.id, name: row.name }}
+																	state={{ data: row }}
 																>
 																	<BuildIcon />
 																</IconButton>

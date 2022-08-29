@@ -6,13 +6,10 @@ import { Link, useLocation } from 'react-router-dom';
 import Delete from './deleted';
 
 const Deleted = () => {
-	const location = useLocation();
-	const { handleSubmit } = useForm();
-	const state = location.state;
+	const state = useLocation().state;
 	const idTournament = state.id;
 	const name = state.name;
 	const [run, setRun] = useState(false);
-	console.log(run);
 
 	return (
 		<Box>
