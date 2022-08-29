@@ -133,7 +133,7 @@ const TournamentItem = (onData) => {
 													<>
 														<IconButton
 															component={Link}
-															to="/info-tournament"
+															to="/all-tournaments/panel-info"
 															state={{ id: row.id, name: row.name }}
 														>
 															<SearchIcon />
@@ -147,7 +147,7 @@ const TournamentItem = (onData) => {
 																	':hover': { backgroundColor: '#CFAB27', color: 'white' },
 																}}
 																	component={Link}
-																	to=""
+																	to="/admin-panel/tournaments/panel-updated"
 																	state={{ id: row.id, name: row.name }}
 																>
 																	<BuildIcon />
@@ -159,7 +159,7 @@ const TournamentItem = (onData) => {
 																		':hover': { backgroundColor: 'red', color: 'white' },
 																	}}
 																	component={Link}
-																	to="/all-tournaments/panel-deleted"
+																	to="/admin-panel/tournaments/panel-deleted"
 																	state={{ id: row.id, name: row.name }}
 																>
 																	<DeleteIcon />

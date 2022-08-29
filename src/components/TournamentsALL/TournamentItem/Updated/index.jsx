@@ -1,1 +1,3 @@
-// const Upd
+const Updated = () => {}
+
+export default Updated
