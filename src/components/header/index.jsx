@@ -20,13 +20,13 @@ import CreateIcon from '@mui/icons-material/Create';
 import LensBlurIcon from '@mui/icons-material/LensBlur';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { adminAtom, jwtAtom } from '../../atoms/jwtAtom';
 import { useJwtAdmin } from '../../hooks/useJwt';
-
 
 const drawerWidth = 240;
 
@@ -101,8 +101,8 @@ const Header = () => {
 	const [open, setOpen] = useState(false);
 	const [token, setToken] = useRecoilState(jwtAtom);
 	const [isAdmin, setIsAdmin] = useRecoilState(adminAtom);
-	
-	useJwtAdmin()
+
+	useJwtAdmin();
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -179,6 +179,32 @@ const Header = () => {
 										<LogoutIcon />
 									</ListItemIcon>
 									<ListItemText primary="logout" sx={{ opacity: open ? 1 : 0 }} />
+								</ListItemButton>
+							</ListItem>
+							<ListItem
+								key="profil"
+								disablePadding
+								sx={{ display: 'block' }}
+								component={Link}
+								to="/profil"
+							>
+								<ListItemButton
+									sx={{
+										minHeight: 48,
+										justifyContent: open ? 'initial' : 'center',
+										px: 2.5,
+									}}
+								>
+									<ListItemIcon
+										sx={{
+											minWidth: 0,
+											mr: open ? 3 : 'auto',
+											justifyContent: 'center',
+										}}
+									>
+										<AccountCircleIcon />
+									</ListItemIcon>
+									<ListItemText primary="profil" sx={{ opacity: open ? 1 : 0 }} />
 								</ListItemButton>
 							</ListItem>
 							{isAdmin ? (

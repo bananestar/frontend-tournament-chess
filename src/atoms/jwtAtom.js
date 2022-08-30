@@ -35,7 +35,15 @@ export const bearerSelector = selector({
     },
 });
 
+
+// isAdmin
 export const adminAtom = atom({
     key: 'adminAtom',
     default: false,
 });
+
+// Id
+export const userIdAtom = atom({
+    key:'userIdAtom',
+    default: null,
+})
