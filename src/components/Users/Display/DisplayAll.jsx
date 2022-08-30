@@ -51,28 +51,15 @@ const DisplayAll = ({ onData }) => {
 		setSearched(searched);
 
 		if (!searched) {
-			console.log('if');
 			setRows(rowsSave);
 		} else {
-			console.log('else');
 			setRows(
 				rows.filter((row) => {
-					const searchByPseudo = row.pseudo
-						.toString()
-						.toLowerCase()
-						.includes(searched.toString().toLowerCase());
-
-					const searchByEmail = row.email
-						.toString()
-						.toLowerCase()
-						.includes(searched.toString().toLowerCase());
-
-					if (searchByPseudo) {
-						return searchByPseudo;
+					if (row.pseudo.toString().toLowerCase().startsWith(searched.toString().toLowerCase())) {
+						return row.pseudo.toString().toLowerCase();
 					}
-
-					if (searchByEmail) {
-						return searchByEmail;
+					if (row.email.toString().toLowerCase().startsWith(searched.toString().toLowerCase())) {
+						return row.email.toString().toLowerCase();
 					}
 				})
 			);
