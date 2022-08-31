@@ -18,6 +18,8 @@ import { Link, useLocation } from 'react-router-dom';
 import HowManyUser from './HowManyUser';
 import { adminAtom } from '../../../atoms/jwtAtom';
 import { useRecoilState } from 'recoil';
+import { Box, CircularProgress, InputAdornment, TextField } from '@mui/material';
+import Subscribe from './Subscribe';
 
 const columns = [
 	{ id: 'name', label: 'Name', minWidth: 170 },
@@ -40,7 +42,9 @@ const TournamentItem = (onData) => {
 	const data = onData.onData;
 	const [page, setPage] = useState(0);
 	const [rows, setRows] = useState([]);
+	const [rowsSave, setRowsSave] = useState([]);
 	const [rowsPerPage, setRowsPerPage] = useState(10);
+	const [searched, setSearched] = useState('');
 
 	const pathLocation = useLocation().pathname;
 
@@ -55,6 +59,37 @@ const TournamentItem = (onData) => {
 		setPage(0);
 	};
 
+	const requestSearch = (searched) => {
+		setSearched(searched);
+		console.log(searched);
+
+		if (!searched) {
+			setRows(rowsSave);
+		} else {
+			setRows(
+				rows.filter((row) => {
+					if (row.name.toString().toLowerCase().startsWith(searched.toString().toLowerCase())) {
+						return row.name.toString().toLowerCase();
+					}
+					if (row.category.toString().toLowerCase().startsWith(searched.toString().toLowerCase())) {
+						return row.category.toString().toLowerCase();
+					}
+					if (row.statut.toString().toLowerCase().startsWith(searched.toString().toLowerCase())) {
+						return row.statut.toString().toLowerCase();
+					}
+					if (
+						row.registrationEND
+							.toString()
+							.toLowerCase()
+							.startsWith(searched.toString().toLowerCase())
+					) {
+						return row.registrationEND.toString().toLowerCase();
+					}
+				})
+			);
+		}
+	};
+	// category:junior
 	const createData = (
 		name,
 		location,
@@ -93,105 +128,131 @@ const TournamentItem = (onData) => {
 			);
 		});
 		setRows(newData);
+		setRowsSave(newData);
 	}, []);
 
-	return (
-		<Paper sx={{ width: '100%', overflow: 'hidden' }}>
-			<TableContainer>
-				<Table stickyHeader aria-label="sticky table">
-					<TableHead>
-						<TableRow>
-							{columns.map((column) => (
-								<TableCell
-									key={column.id}
-									align={column.align}
-									style={{ minWidth: column.minWidth }}
-								>
-									{column.label}
-								</TableCell>
-							))}
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-							return (
-								<TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-									{columns.map((column) => {
-										const value = row[column.id];
-										return (
-											<TableCell key={column.id} align={column.align}>
-												{column.id === 'player' ? (
-													<>
-														<HowManyUser onData={row.id} />
-														{value}
-													</>
-												) : (
-													value
-												)}
-												{column.id === 'womenOnly' ? value ? <FemaleIcon /> : <WcIcon /> : ''}
-												{column.id === 'action' ? (
-													<>
-														<IconButton
-															component={Link}
-															to="/all-tournaments/panel-info"
-															state={{ id: row.id, name: row.name }}
-														>
-															<SearchIcon />
-														</IconButton>
-														{isAdmin && pathLocation==='/admin-panel' ? (
-															<>
-																<IconButton
-																sx={{
-																	borderColor: 'yellow',
-																	color: '#CFAB27',
-																	':hover': { backgroundColor: '#CFAB27', color: 'white' },
-																}}
-																	component={Link}
-																	to="/admin-panel/tournaments/panel-updated"
-																	state={{ data: row }}
-																>
-																	<BuildIcon />
-																</IconButton>
-																<IconButton
-																	sx={{
-																		borderColor: 'red',
-																		color: 'red',
-																		':hover': { backgroundColor: 'red', color: 'white' },
-																	}}
-																	component={Link}
-																	to="/admin-panel/tournaments/panel-deleted"
-																	state={{ id: row.id, name: row.name }}
-																>
-																	<DeleteIcon />
-																</IconButton>
-															</>
-														) : (
-															''
-														)}
-													</>
-												) : (
-													''
-												)}
-											</TableCell>
-										);
-									})}
-								</TableRow>
-							);
-						})}
-					</TableBody>
-				</Table>
-			</TableContainer>
-			<TablePagination
-				rowsPerPageOptions={[10, 25, 100]}
-				component="div"
-				count={rows.length}
-				rowsPerPage={rowsPerPage}
-				page={page}
-				onPageChange={handleChangePage}
-				onRowsPerPageChange={handleChangeRowsPerPage}
-			/>
-		</Paper>
-	);
+	if (rows && rowsSave) {
+		return (
+			<Paper sx={{ width: '100%', overflow: 'hidden' }}>
+				<TextField
+					variant="outlined"
+					placeholder="search..."
+					value={searched}
+					type="search"
+					InputProps={{
+						startAdornment: (
+							<InputAdornment position="start">
+								<SearchIcon />
+							</InputAdornment>
+						),
+					}}
+					onInput={(e) => requestSearch(e.target.value)}
+				/>
+				<TableContainer>
+					<Table stickyHeader aria-label="sticky table">
+						<TableHead>
+							<TableRow>
+								{columns.map((column) => (
+									<TableCell
+										key={column.id}
+										align={column.align}
+										style={{ minWidth: column.minWidth }}
+									>
+										{column.label}
+									</TableCell>
+								))}
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+								return (
+									<TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+										{columns.map((column) => {
+											const value = row[column.id];
+											return (
+												<TableCell key={column.id} align={column.align}>
+													{column.id === 'player' ? (
+														<>
+															<HowManyUser onData={row.id} />
+															{value}
+														</>
+													) : (
+														value
+													)}
+													{column.id === 'womenOnly' ? value ? <FemaleIcon /> : <WcIcon /> : ''}
+													{column.id === 'action' ? (
+														<>
+															<IconButton
+																component={Link}
+																to="/all-tournaments/panel-info"
+																state={{ id: row.id, name: row.name }}
+															>
+																<SearchIcon />
+															</IconButton>
+
+															<Subscribe onData={row.id} />
+
+															{isAdmin && pathLocation === '/admin-panel' ? (
+																<>
+																	<IconButton
+																		sx={{
+																			borderColor: 'yellow',
+																			color: '#CFAB27',
+																			':hover': { backgroundColor: '#CFAB27', color: 'white' },
+																		}}
+																		component={Link}
+																		to="/admin-panel/tournaments/panel-updated"
+																		state={{ data: row }}
+																	>
+																		<BuildIcon />
+																	</IconButton>
+																	<IconButton
+																		sx={{
+																			borderColor: 'red',
+																			color: 'red',
+																			':hover': { backgroundColor: 'red', color: 'white' },
+																		}}
+																		component={Link}
+																		to="/admin-panel/tournaments/panel-deleted"
+																		state={{ id: row.id, name: row.name }}
+																	>
+																		<DeleteIcon />
+																	</IconButton>
+																</>
+															) : (
+																''
+															)}
+														</>
+													) : (
+														''
+													)}
+												</TableCell>
+											);
+										})}
+									</TableRow>
+								);
+							})}
+						</TableBody>
+					</Table>
+				</TableContainer>
+				<TablePagination
+					rowsPerPageOptions={[10, 25, 100]}
+					component="div"
+					count={rows.length}
+					rowsPerPage={rowsPerPage}
+					page={page}
+					onPageChange={handleChangePage}
+					onRowsPerPageChange={handleChangeRowsPerPage}
+				/>
+			</Paper>
+		);
+	} else {
+		return (
+			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+				<CircularProgress />
+			</Box>
+		);
+	}
 };
 
 export default TournamentItem;

@@ -1,4 +1,5 @@
 import {
+	Avatar,
 	Card,
 	CardContent,
 	Paper,
@@ -10,7 +11,7 @@ import {
 	TableRow,
 	Typography,
 } from '@mui/material';
-import { Box, Container } from '@mui/system';
+import { Box } from '@mui/system';
 import CakeIcon from '@mui/icons-material/Cake';
 import ManIcon from '@mui/icons-material/Man';
 import WomanIcon from '@mui/icons-material/Woman';

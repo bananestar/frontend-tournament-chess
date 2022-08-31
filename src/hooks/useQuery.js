@@ -33,17 +33,57 @@ export const useDelete = (url, auth, run) => {
 
 	useEffect(() => {
 		if (run) {
-			axios.delete(url, {
-				headers: {
-					Authorization: `Bearer ${auth}`,
-				}
-			}).then(({ data }) => {
-				setData(data)
-			}).catch((errors) => {
-				setErrors(errors)
-			}).finally(() => {
-				setLoading(false)
-			})
+			if (Object.keys(auth).length > 0) {
+				axios.delete(url, {
+					headers: {
+						Authorization: `Bearer ${auth}`,
+					}
+				}).then(({ data }) => {
+					setData(data)
+				}).catch((errors) => {
+					setErrors(errors)
+				}).finally(() => {
+					setLoading(false)
+				})
+			} else {
+				axios.delete(url
+				).then(({ data }) => {
+					setData(data)
+				}).catch((errors) => {
+					setErrors(errors)
+				}).finally(() => {
+					setLoading(false)
+				})
+			}
+		}
+	}, [run])
+	return { data, isLoading, errors }
+}
+
+export const useAdd = (url, auth, body, run) => {
+	const [data, setData] = useState();
+	const [isLoading, setLoading] = useState(true);
+	const [errors, setErrors] = useState();
+
+	useEffect(() => {
+		if (run) {
+			if (Object.keys(auth).length > 0) {
+				axios.post(url, body, { headers: { Authorization: `Bearer ${auth}` } }).then(({ data }) => {
+					setData(data)
+				}).catch((errors) => {
+					setErrors(errors)
+				}).finally(() => {
+					setLoading(false)
+				})
+			} else {
+				axios.post(url, body).then(({ data }) => {
+					setData(data)
+				}).catch((errors) => {
+					setErrors(errors)
+				}).finally(() => {
+					setLoading(false)
+				})
+			}
 		}
 	}, [run])
 	return { data, isLoading, errors }
@@ -55,7 +95,7 @@ export const useUpdate = (url, auth, body) => {
 	const [errors, setErrors] = useState();
 
 	useEffect(() => {
-		axios.put(url, body, { headers: { Authorization: `Bearer ${auth}` } }).then(({data})=>{
+		axios.put(url, body, { headers: { Authorization: `Bearer ${auth}` } }).then(({ data }) => {
 			setData(data)
 		}).catch((errors) => {
 			setErrors(errors)
