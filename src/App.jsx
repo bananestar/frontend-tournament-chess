@@ -11,6 +11,7 @@ import { useJwtAdmin } from './hooks/useJwt';
 import DeletedTournament from './components/TournamentsALL/TournamentItem/Deleted';
 import UpdatedTournament from './components/TournamentsALL/TournamentItem/Updated';
 import ProfilPage from './pages/profil';
+import MatchEditor from './components/TournamentsALL/TournamentInfo/MatchEditor';
 
 function App() {
 	useJwtAdmin();
@@ -24,6 +25,7 @@ function App() {
 					<Route path="/profil" element={<ProfilPage />} />
 					<Route path="/all-tournaments" element={<TournamentPage />} />
 					<Route path="/all-tournaments/panel-info" element={<TournamentInfo />} />
+					<Route path="/admin-panel/match/panel-editor" element={<MatchEditor />} />
 					<Route path="/admin-panel/tournaments/panel-updated" element={<UpdatedTournament />} />
 					<Route path="/admin-panel/tournaments/panel-deleted" element={<DeletedTournament />} />
 					<Route path="/admin-panel" element={<AdminPage />} />

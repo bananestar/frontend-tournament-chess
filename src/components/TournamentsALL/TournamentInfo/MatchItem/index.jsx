@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
-
-const MatchInfo = (match) => {
+const MatchItem = (match) => {
 	const [playerWhite, setPlayerWhite] = useState('');
 	const [playerBlack, setPlayerBlack] = useState('');
 	const m = match.match.row;
@@ -37,4 +36,4 @@ const MatchInfo = (match) => {
 	);
 };
 
-export default MatchInfo;
+export default MatchItem;
