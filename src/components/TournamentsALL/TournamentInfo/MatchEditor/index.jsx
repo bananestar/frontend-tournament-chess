@@ -17,7 +17,8 @@ import BuildIcon from '@mui/icons-material/Build';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Editor from './editor';
+import Editor from './editor-v2';
+import { nanoid } from 'nanoid';
 
 const columns = [
 	{ id: 'playerWhite', label: 'Player White' },
@@ -53,6 +54,7 @@ const MatchEditor = () => {
 
 	const createCellMatch = (playerWhite, playerBlack, result) => {
 		return {
+			id: nanoid(),
 			playerWhite,
 			playerBlack,
 			result,
@@ -86,6 +88,14 @@ const MatchEditor = () => {
 		setListerUser(list);
 		setRows(formatedMatch);
 	}, []);
+
+	const handleUpdatePlayer = (id, player, colorPlayer) => {
+		setRows((rows) => rows.map((row) => (row.id !== id ? row : { ...row, [colorPlayer]: player })));
+	};
+
+	const handleDeleteMatch = (id) => {
+		setRows((rows) => rows.filter((row) => row.id !== id));
+	};
 
 	// console.log('dataMatch');
 	// console.log(dataMatch);
@@ -121,105 +131,12 @@ const MatchEditor = () => {
 								{
 									return (
 										<TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-											{columns.map((column) => {
-												return <Editor row={row} column={column} users={listUser} />
-												// const value = row[column.id];
-												// return (
-												// 	<TableCell key={column.id} align={column.align}>
-												// 		{/* {value} */}
-												// 		{column.id === 'action' ? (
-												// 			<>
-												// 				<IconButton onClick={()=>setUpdate(!update)}>
-												// 					<BuildIcon />
-												// 				</IconButton>
-												// 				<IconButton>
-												// 					<DeleteIcon />
-												// 				</IconButton>
-												// 			</>
-												// 		) : (
-												// 			<>
-												// 				{column.id === 'playerWhite' ? (
-												// 					<>
-												// 						<Select
-												// 							disabled={update}
-												// 							labelId={column.id + '-select-label'}
-												// 							id={column.id + '-select'}
-												// 							margin="dense"
-												// 							size="small"
-												// 							value={value}
-												// 							fullWidth
-												// 							onChange={(e) => setUpdateWhitePlayer(e.target.value)}
-												// 						>
-												// 							{listUser.map((user) => {
-												// 								return <MenuItem value={user}>{user}</MenuItem>;
-												// 							})}
-												// 						</Select>
-												// 					</>
-												// 				) : (
-												// 					<>
-												// 						{column.id === 'playerBlack' ? (
-												// 							<>
-												// 								<Select
-												// 									disabled={update}
-												// 									labelId={column.id + '-select-label'}
-												// 									id={column.id + '-select'}
-												// 									margin="dense"
-												// 									size="small"
-												// 									value={value}
-												// 									fullWidth
-												// 									onChange={(e) => setUpdateBlackPlayer(e.target.value)}
-												// 								>
-												// 									{listUser.map((user) => {
-												// 										return <MenuItem value={user}>{user}</MenuItem>;
-												// 									})}
-												// 								</Select>
-												// 							</>
-												// 						) : (
-												// 							<>
-												// 								{column.id === 'result' ? (
-												// 									<>
-												// 										<Select
-												// 											disabled={update}
-												// 											labelId={column.id + '-select-label'}
-												// 											id={column.id + '-select'}
-												// 											margin="dense"
-												// 											size="small"
-												// 											value={value}
-												// 											fullWidth
-												// 											onChange={(e) => setUpdateResult(e.target.value)}
-												// 										>
-												// 											<MenuItem value="NotPlayed">NotPlayed</MenuItem>
-												// 											<MenuItem value="WhiteWin">WhiteWin</MenuItem>
-												// 											<MenuItem value="BlackWin">BlackWin</MenuItem>
-												// 											<MenuItem value="Draw">Draw</MenuItem>
-												// 										</Select>
-												// 									</>
-												// 								) : (
-												// 									''
-												// 								)}
-												// 							</>
-												// 						)}
-												// 					</>
-												// 				)}
-												// 			</>
-												// 			// <Select
-												// 			// 	// disabled
-												// 			// 	labelId={column.id+'-select-label'}
-												// 			// 	id={column.id+'-select'}
-												// 			// 	label={column.id}
-												// 			// 	margin="dense"
-												// 			// 	size="small"
-												// 			// 	fullWidth
-												// 			// 	value={value}
-												// 			// 	// onChange={(e) => setGender(e.target.value)}
-												// 			// >
-												// 			// 	<MenuItem value={value}>{value}</MenuItem>
-
-												// 			// </Select>
-												// 		)}
-												// 	</TableCell>
-												// );
-											})}
+											<Editor
+												{...row}
+												users={listUser}
+												updatePlayer={(player, color) => handleUpdatePlayer(row.id, player, color)}
+												deleteMatch={() => handleDeleteMatch(row.id)}
+											/>
 										</TableRow>
 									);
 								}
