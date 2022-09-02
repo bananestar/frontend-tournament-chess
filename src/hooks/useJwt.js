@@ -9,7 +9,7 @@ export const useJwtAdmin = () => {
     const [userId, setUserId] = useRecoilState(userIdAtom)
 	const [token, setToken] = useRecoilState(jwtAtom);
 
-    const { decodedToken } = useJwt(token)
+    const { decodedToken, isExpired } = useJwt(token)
     
     useEffect(() => {
         setIsAdmin(false)
@@ -22,6 +22,13 @@ export const useJwtAdmin = () => {
             console.log('isAdmin => ',isAdmin);
         }
     }, [decodedToken])
+
+    useEffect(()=>{
+        if (isExpired) {
+            setToken(null)
+        }
+    },[isExpired])
+    
     console.log('isAdmin => ',isAdmin);
     return { isAdmin }
 }

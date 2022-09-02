@@ -59,7 +59,7 @@ const TournamentInfo = () => {
 				<IconButton
 					component={Link}
 					to="/admin-panel/match/panel-editor"
-					state={{ data: results, users: users , registers: registers}}
+					state={{ data: results, users: users , registers: registers, idTournament: idTournament}}
 				>
 					<BuildIcon />
 					Editor

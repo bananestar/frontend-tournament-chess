@@ -106,6 +106,26 @@ export const useUpdate = (url, auth, body) => {
 	return { data, isLoading, errors }
 }
 
+export const useUpdateControl = (url, auth, body, run) => {
+	const [data, setData] = useState();
+	const [isLoading, setLoading] = useState(true);
+	const [errors, setErrors] = useState();
+
+	useEffect(() => {
+		console.log('run use '+run);
+		if (run) {
+			axios.put(url, body, { headers: { Authorization: `Bearer ${auth}` } }).then(({ data }) => {
+				setData(data)
+			}).catch((errors) => {
+				setErrors(errors)
+			}).finally(() => {
+				setLoading(false)
+			})
+		}
+	}, [body])
+	return { data, isLoading, errors }
+}
+
 export const useLogin = (identifiers) => {
 	const [data, setData] = useState();
 	const [isLoading, setLoading] = useState(true);
