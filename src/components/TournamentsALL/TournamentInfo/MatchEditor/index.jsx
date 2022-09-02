@@ -11,6 +11,7 @@ import {
 import { Box, Container } from '@mui/system';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import AddMatch from './addMatch';
 import Editor from './editor-v2';
 import RequestDelete from './requestDelete';
 import RequestUpdate from './requestUpdate';
@@ -166,13 +167,6 @@ const MatchEditor = () => {
 			)}
 			{deleted ? <RequestDelete run={run} id={idMatch} callbackRun={(res) => setRun(res)} /> : ''}
 
-			{/* {updated ? (
-				<RequestUpdate run={run} request={request} id={idMatch} callbackRun={() => setRun(false)} />
-			) : (
-				''
-			)}
-			{deleted ? <RequestDelete run={run} id={idMatch} callbackRun={() => setRun(false)} /> : ''} */}
-
 			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 				<Container>
 					<h1>Match</h1>
@@ -225,6 +219,7 @@ const MatchEditor = () => {
 				</Container>
 				<Container>
 					<h1>Add Match</h1>
+					<AddMatch users={listUser}/>
 				</Container>
 				<Container>
 					<h1>List User of tournament</h1>
